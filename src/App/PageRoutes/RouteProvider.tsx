@@ -1,13 +1,13 @@
 // Import the core libraries and functions
 import {
-  HashRouter as Router,
   Route,
   Routes // updated from `Switch` in v6
-} from 'react-router-dom'
+} from "react-router-dom"
 
 // Import the various page views within the App
-import HomePage from '../../pages/home'
-import Registration from "../../pages/registration"
+import { Login } from "../../pages/login"
+import { Home } from "../../pages/home"
+import { Registration } from "../../pages/registration"
 
 
 // Component that contains all the specific routes a user
@@ -16,20 +16,20 @@ import Registration from "../../pages/registration"
 export default function RouteProvider() {
 
   return (
-    // Sets the `HashRouter` (renamed as `Router`)
-    <Router>
 
-      {/* Selects the matching URL route. */}
-      {/* Formerly known as `<Switch>` */}
-      <Routes>
+    // Selects the matching URL route.
+    // Formerly known as `<Switch>`
+    <Routes>
 
-        {/* Route that allows a new user to register an account */}
-        <Route path="/registration" element={<Registration />} />
+      {/* Route for users to login */}
+      <Route path="/login" element={<Login />} />
 
-        {/* Home page route -- requires valid login token */}
-        <Route path="/" element={<HomePage />} />
+      {/* Route that allows a new user to register an account */}
+      <Route path="/registration" element={<Registration />} />
 
-      </Routes>
-    </Router>
+      {/* Home page route -- requires valid login token */}
+      <Route path="/" element={<Home />} />
+
+    </Routes>
   )
 }

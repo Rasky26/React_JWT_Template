@@ -1,7 +1,8 @@
 // Import the core libraries and functions
 import { useState } from "react"
-import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+
+// Import TS-styled functions
+import { useAppDispatch } from "../../utils/hooks"
 
 
 // Component that handles the user registration form
@@ -17,7 +18,7 @@ export default function RegisterNewUserForm() {
 
 
   // Initialize the `dispatch` function
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   // Set the registration variables. Uses `Object.freeze({})`
   // for added security.
@@ -52,16 +53,14 @@ export default function RegisterNewUserForm() {
     // Prevent the page reload on submit
     e.preventDefault()
 
-    // Send the registration request to the associated SAGA
-    dispatch({
-      type: "REGISTER_NEW_USER",
-      payload: {
-        // Pass the new user's information to the server
-        email: registrationData.email,
-        username: registrationData.username,
-        password: registrationData.password,
-      },
-    })
+    // Dispatch the user registration information using the `registerNewUser` keyword
+    // dispatch(registerNewUser({
+
+    //   // Pass the new user's information
+    //   email: registrationData.email,
+    //   username: registrationData.username,
+    //   password: registrationData.password,
+    // }))
   }
 
   // Build the DOM elements
