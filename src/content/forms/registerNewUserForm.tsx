@@ -1,5 +1,5 @@
 // Import the core libraries and functions
-import { useState } from "react"
+import { ChangeEvent, FC, FormEvent, useState } from "react"
 
 // Import TS-styled functions
 import { useAppDispatch } from "../../utils/hooks"
@@ -7,13 +7,13 @@ import { useAppDispatch } from "../../utils/hooks"
 
 // Component that handles the user registration form
 // on the DOM
-export default function RegisterNewUserForm() {
+export const RegisterNewUserForm: FC = () => {
 
   // Initialize the TS pattern structure for our form data
   interface InitialFormDataTypes {
-    email: string;
-    username: string;
-    password: string;
+    email: string
+    username: string
+    password: string
   }
 
 
@@ -30,13 +30,12 @@ export default function RegisterNewUserForm() {
   })
 
 
-
   // Initialize the local STATE values based on the frozen values
   const [registrationData, setRegistrationData] = useState(initialFormData)
 
 
   // Function that handles the user entry of data into the form
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRegistrationData({
       // Spread the current values
       ...registrationData,
@@ -49,7 +48,7 @@ export default function RegisterNewUserForm() {
 
   // Function that handles submitting the registration information to
   // the server
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent the page reload on submit
     e.preventDefault()
 
@@ -68,9 +67,9 @@ export default function RegisterNewUserForm() {
     <form onSubmit={handleSubmit}>
       <label htmlFor="email">Email</label>
       <input type="text" name="email" value={registrationData.email} onChange={e => handleChange(e)} required />
-      <label htmlFor="email">Username</label>
+      <label htmlFor="username">Username</label>
       <input type="text" name="username" value={registrationData.username} onChange={e => handleChange(e)} required />
-      <label htmlFor="email">Password</label>
+      <label htmlFor="password">Password</label>
       <input type="password" name="password" value={registrationData.password} onChange={e => handleChange(e)} required />
       <button type="submit">Submit</button>
     </form>

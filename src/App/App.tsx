@@ -6,7 +6,7 @@ import { HashRouter as Router } from "react-router-dom"
 import { Header } from "../content/header/Header"
 
 // Import the used components
-import RouteProvider from "./PageRoutes/RouteProvider"
+import { RouteProvider } from "./PageRoutes/RouteProvider"
 
 // Import the used stylesheet
 import "./App.css"

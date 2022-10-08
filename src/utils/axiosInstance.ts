@@ -1,5 +1,6 @@
 import axios from "axios"
 
+
 // Base URL to access the server
 const baseURL = "http://127.0.0.1:8000"
 
@@ -15,13 +16,16 @@ const axiosInstance: any = axios.create({
   // Timeout length before a URL call is cancelled, in milliseconds
   timeout: 5000,
 
-  // IMPORTANT! -- Set the headers with the crediential information
+  // IMPORTANT! -- Set the headers with the credential information
   headers: {
     Authorization: token ?
       "JWT " + token
       :
-      // null,
-      "",
+      // null, // Would prefer to use `null`, but can not figure out
+      //       // how to make it work with TypeScript
+
+      "", // Using blank for now...
+
     "Content-Type": "application/json",
     accept: "application/json",
   }

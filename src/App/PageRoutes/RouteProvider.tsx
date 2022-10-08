@@ -1,4 +1,5 @@
 // Import the core libraries and functions
+import { FC } from "react"
 import {
   Route,
   Routes // updated from `Switch` in v6
@@ -13,7 +14,7 @@ import { Registration } from "../../pages/registration"
 // Component that contains all the specific routes a user
 // could access (permission-level dependant) and the
 // associated page component
-export default function RouteProvider() {
+export const RouteProvider: FC = () => {
 
   return (
 
