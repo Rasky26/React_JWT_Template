@@ -1,5 +1,7 @@
 // Import the core libraries and functions
+import axiosInstance from "../../utils/axiosInstance"
 import { ChangeEvent, FC, FormEvent, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 // Import TS-styled functions
 import { useAppDispatch } from "../../utils/hooks"
@@ -19,6 +21,9 @@ export const RegisterNewUserForm: FC = () => {
 
   // Initialize the `dispatch` function
   const dispatch = useAppDispatch()
+
+  // Initialize the `navigate` function
+  const navigate = useNavigate()
 
   // Set the registration variables. Uses `Object.freeze({})`
   // for added security.
@@ -52,6 +57,19 @@ export const RegisterNewUserForm: FC = () => {
     // Prevent the page reload on submit
     e.preventDefault()
 
+    axiosInstance
+      .post("accounts/register/", {
+        email: registrationData.email,
+        username: registrationData.username,
+        password: registrationData.password,
+      })
+      .then((res: any) => {
+        console.log("Res is:", res)
+        console.log("...with", res.data)
+        navigate("/login")
+      })
+      .catch((err: any) => console.log(`Error in registration with ${err}`))
+
     // Dispatch the user registration information using the `registerNewUser` keyword
     // dispatch(registerNewUser({
 
@@ -60,6 +78,7 @@ export const RegisterNewUserForm: FC = () => {
     //   username: registrationData.username,
     //   password: registrationData.password,
     // }))
+    console.log(registrationData.email)
   }
 
   // Build the DOM elements

@@ -1,7 +1,7 @@
 // Import the required libraries and functions
-import { ChangeEvent, FC, FormEvent, useState } from "react"
-
 import axiosInstance from "../../utils/axiosInstance"
+import { ChangeEvent, FC, FormEvent, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 
 // Component that builds the login form
@@ -12,6 +12,22 @@ export const LoginForm: FC = () => {
     email: string
     password: string
   }
+
+  // Initialize the token response structure
+  interface TokenSuccessResponse {
+    config: Object
+    data: {
+      access: string
+      refresh: string
+    }
+    headers: Object
+    request: XMLHttpRequest
+    status: number
+    statusText: string
+  }
+
+  // Initialize the `navigate` function
+  const navigate = useNavigate()
 
   // Set the login variables. Uses `Object.freeze({})` for added security.
   // REF: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze
@@ -35,14 +51,50 @@ export const LoginForm: FC = () => {
   }
 
   // Function that handles when a user submits their login info to the server
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    console.log("Here is login:", loginData)
+    // try {
 
+    //   const response1: TokenSuccessResponse = await axiosInstance.post("accounts/token/", loginData)
+
+    //   console.log("Here is reponse1", response1)
+
+    //   if (response1.statusText !== "OK") {
+    //     throw new Error(`HTTP error with: ${response1.status} - ${response1.statusText}`)
+    //   }
+
+    //   console.log("Here is reponse1", response1)
+
+    //   const response2: any = await axiosInstance.get("accounts/users/")
+
+    //   console.log("Here is 2:", response2)
+
+    // }
+
+    // catch (error) {
+    //   console.error(`Could not login due to error: ${error}`);
+    // }
     axiosInstance
       .post("accounts/token/", loginData)
-      .then((res: any) => { console.log("Did it work?!?!", res) })
+      .then((res: TokenSuccessResponse) => {
+        // Set the various cookies to local storage values
+        localStorage.setItem("access_token", res.data.access)
+        localStorage.setItem("refresh_token", res.data.refresh)
+
+        // IMPORTANT !!!
+        // Update the `axios` instance with the user access token
+        axiosInstance.defaults.headers["Authorization"] = "JWT" + localStorage.getItem("access_token")
+
+        console.log("Set tokens", axiosInstance.defaults.headers["Authorization"])
+
+        navigate("/")
+      })
+      // .then(axiosInstance.get("accounts/users/")
+      //   .then((res2: any) => {
+      //     console.log("This is res2", res2)
+      //   }))
+      .catch((err: any) => console.log(`Error in login with ${err}`))
   }
 
   return (
