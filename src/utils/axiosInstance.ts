@@ -9,7 +9,7 @@ const baseURL: string = "http://127.0.0.1:8000/"
 const refreshTokenURL: string = "accounts/token/refresh/"
 
 // URL redirect path for invalid / expired `refresh_token`
-const expiredTokenRedirectURL: string = "/login/"
+const expiredTokenRedirectURL: string = "/login"
 
 // Get the token from localStorage, or undefined if not set
 const token: string | null = localStorage.getItem("access_token")
@@ -26,10 +26,10 @@ const axiosInstance: any = axios.create({
 
   // IMPORTANT! -- Set the headers with the credential information
   headers: {
-    // Authorization: token ?
-    //   "JWT " + token
-    Authorization: localStorage.getItem("access_token") ?
-      "JWT " + localStorage.getItem("access_token")
+    Authorization: token ?
+      "JWT " + token
+      // Authorization: localStorage.getItem("access_token") ?
+      //   "JWT " + localStorage.getItem("access_token")
       :
       // null, // Would prefer to use `null`, but can not figure out
       //       // how to make it work with TypeScript
@@ -48,11 +48,11 @@ const axiosInstance: any = axios.create({
 //
 // REF: https://github.com/veryacademy/YT-Django-DRF-Simple-Blog-Series-JWT-Part-3/blob/master/react/blogapi/src/axios.js
 // Linked from: https://www.youtube.com/watch?v=AfYfvjP1hK8&list=PLOLrQ9Pn6caw0PjVwymNc64NkUNbZlhFw&index=7
-axiosInstance.interceptors.response.use((response: any) => {
-
-  // If there are no errors, allow `axios` process to continue
-  return response
-},
+axiosInstance.interceptors.response.use(
+  (response: any) => {
+    // If there are no errors, allow `axios` process to continue
+    return response
+  },
 
   // Any status codes that falls outside the range of 2xx cause this function to trigger.
   // Either attempt to refresh the `access` and `refresh` tokens, OR return the user to a
@@ -64,23 +64,14 @@ axiosInstance.interceptors.response.use((response: any) => {
     // (or for any other `undefined` response)
     if (typeof error.response === 'undefined') {
       alert(
-        '--- axiosInstance.ts ---' +
-        '' +
-        'A server/network error occurred. ' +
-        'Looks like CORS might be the problem. ' +
-        'Sorry about this - we will get it fixed shortly.'
+        `--- axiosInstance.ts ---
+        
+        A server/network error occurred.
+        Looks like CORS might be the problem.
+        Sorry about this - we will get it fixed shortly.
+        `
       )
 
-      // LATER --> May want to update with:
-      //
-      // Promise.reject(new Error("fail")).then(
-      //   () => {
-      //     // not called
-      //   },
-      //   (error) => {
-      //     console.error(error); // Stacktrace
-      //   },
-      // )
       return Promise.reject(error)
     }
 
@@ -90,8 +81,8 @@ axiosInstance.interceptors.response.use((response: any) => {
       error.response.status === 401 &&
       originalRequest.url === baseURL + refreshTokenURL
     ) {
-      // Navigates the user to the login screen
-      window.location.href = "/login/"
+      // Navigates the user to an un-authenticated page (currently set to "/login/")
+      window.location.href = expiredTokenRedirectURL
       return Promise.reject(error)
     }
 

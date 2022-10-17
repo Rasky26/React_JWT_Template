@@ -3,6 +3,7 @@ import { FC } from "react"
 
 // Import the used components
 import { LoginButton } from "../../components/contentSpecific/header/LoginButton"
+import { LogoutButton } from "../../components/contentSpecific/header/LogoutButton"
 
 
 // Component that builds the App header bar
@@ -17,6 +18,10 @@ export const Header: FC = () => {
 
       <div>
         <LoginButton />
+      </div>
+
+      <div>
+        <LogoutButton />
       </div>
 
     </section>

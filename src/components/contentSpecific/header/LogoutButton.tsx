@@ -1,9 +1,22 @@
-import { FC } from "react"
+// Import the core libraries and functions
+import { FC, MouseEventHandler } from "react"
+import { useNavigate } from "react-router-dom"
 
 
-export const Logout: FC = () => {
+export const LogoutButton: FC = () => {
 
+  // Initialize the navigate function
+  const navigate = useNavigate()
+
+  // Click handler that navigates the user to the `login` page
+  const handleClick: MouseEventHandler<HTMLButtonElement> = () => {
+
+    // Send the user to the `/login` page
+    navigate("/logout")
+  }
+
+  // Build the DOM element
   return (
-    <button>Logout</button>
+    <button onClick={handleClick}>Logout</button>
   )
 }
