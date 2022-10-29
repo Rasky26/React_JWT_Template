@@ -81,6 +81,8 @@ export const Logout: FC = () => {
 
   // Build the DOM elements
   return (
-    <div>Loggin out...</div>
+    <section className="example-section">
+      <h3>Loggin out...</h3>
+    </section>
   )
 }
