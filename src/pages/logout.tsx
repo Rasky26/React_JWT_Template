@@ -2,6 +2,10 @@
 import axiosInstance from "../utils/axiosInstance"
 import { FC, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAppDispatch } from "../redux/store"
+
+// Import the used components
+import { logout } from "../redux/reducers/user"
 
 
 // Component that handles clearing the credential / authorization of
@@ -21,6 +25,9 @@ export const Logout: FC = () => {
   // Set the variable state value response
   type LogoutResponseState = LogoutResponse | null
 
+
+  // Initialize the dispatch function
+  const dispatch = useAppDispatch()
 
   // Initialize the navigate function
   const navigate = useNavigate()
@@ -48,10 +55,13 @@ export const Logout: FC = () => {
 
     // Remove the header values from `axios`
     axiosInstance.defaults.headers["Authorization"] = ""
+
+    // Call the `logout` reducer to reset ALL redux values back to the initial state
+    dispatch(logout())
   }, [])
 
 
-  // Watch for updated state values.
+  // Watch for updated local state values.
   // Once a successful logout response is received, navigate the user
   // to a different page
   useEffect(() => {

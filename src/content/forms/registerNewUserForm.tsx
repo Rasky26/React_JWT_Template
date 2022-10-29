@@ -3,32 +3,28 @@ import axiosInstance from "../../utils/axiosInstance"
 import { ChangeEvent, FC, FormEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-// Import TS-styled functions
-import { useAppDispatch } from "../../utils/hooks"
-
 
 // Component that handles the user registration form
 // on the DOM
 export const RegisterNewUserForm: FC = () => {
 
+
   // Initialize the TS pattern structure for our form data
-  interface InitialFormDataTypes {
+  interface FormDataTypes {
     email: string
     username: string
     password: string
   }
 
 
-  // Initialize the `dispatch` function
-  const dispatch = useAppDispatch()
-
   // Initialize the `navigate` function
   const navigate = useNavigate()
+
 
   // Set the registration variables. Uses `Object.freeze({})`
   // for added security.
   // REF: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze
-  const initialFormData: InitialFormDataTypes = Object.freeze({
+  const initialFormData: FormDataTypes = Object.freeze({
     email: "" as string,
     username: "" as string,
     password: "" as string,
@@ -57,6 +53,7 @@ export const RegisterNewUserForm: FC = () => {
     // Prevent the page reload on submit
     e.preventDefault()
 
+    // Send the new user registration information to the server
     axiosInstance
       .post("accounts/register/", {
         email: registrationData.email,
@@ -68,29 +65,32 @@ export const RegisterNewUserForm: FC = () => {
         console.log("...with", res.data)
         navigate("/login")
       })
-      .catch((err: any) => console.log(`Error in registration with ${err}`))
-
-    // Dispatch the user registration information using the `registerNewUser` keyword
-    // dispatch(registerNewUser({
-
-    //   // Pass the new user's information
-    //   email: registrationData.email,
-    //   username: registrationData.username,
-    //   password: registrationData.password,
-    // }))
-    console.log(registrationData.email)
+      .catch((err: any) => {
+        console.log(`Error in registration with ${err}`)
+        setRegistrationData({
+          ...registrationData,
+          // Reset `username` and `password` to blank
+          username: "",
+          password: ""
+        })
+      })
   }
 
   // Build the DOM elements
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="login-form">
       <label htmlFor="email">Email</label>
       <input type="text" name="email" value={registrationData.email} onChange={e => handleChange(e)} required />
+      <br />
       <label htmlFor="username">Username</label>
       <input type="text" name="username" value={registrationData.username} onChange={e => handleChange(e)} required />
+      <br />
       <label htmlFor="password">Password</label>
       <input type="password" name="password" value={registrationData.password} onChange={e => handleChange(e)} required />
-      <button type="submit">Submit</button>
+      <br />
+      <div className="submit-button-container">
+        <button type="submit">Submit</button>
+      </div>
     </form>
   )
 }

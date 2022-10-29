@@ -11,12 +11,13 @@ export const Login: FC = () => {
 
   // Build the DOM elements
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="example-section">
+
+      <h3>Login</h3>
 
       <LoginForm />
 
-      <Link to="/registration">Register a new account</Link>
+      <Link to="/registration" className="login-redirect">Register a new account</Link>
 
     </div>
   )

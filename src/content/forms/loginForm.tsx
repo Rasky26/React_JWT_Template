@@ -2,6 +2,8 @@
 import axiosInstance from "../../utils/axiosInstance"
 import { ChangeEvent, FC, FormEvent, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAppDispatch } from "../../redux/store"
+import { initiateLogin, login, logout } from "../../redux/reducers/user"
 
 
 // Component that builds the login form
@@ -26,8 +28,31 @@ export const LoginForm: FC = () => {
     statusText: string
   }
 
+  // Initialize the token response structure
+  interface UserObjectResponse {
+    config: Object
+    data: {
+      id: number
+      email: string
+      username: string
+      first_name: string
+      last_name: string
+      full_name: string
+    }
+    headers: Object
+    request: XMLHttpRequest
+    status: number
+    statusText: string
+  }
+
+
+
+  // Initialize the `dispatch` function
+  const dispatch = useAppDispatch()
+
   // Initialize the `navigate` function
   const navigate = useNavigate()
+
 
   // Set the login variables. Uses `Object.freeze({})` for added security.
   // REF: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze
@@ -36,8 +61,10 @@ export const LoginForm: FC = () => {
     password: "" as string,
   })
 
+
   // Initialize the local STATE values based on the frozen values
   const [loginData, setLoginData] = useState(initialFormData)
+
 
   // Function that handles the user entry of data into the form
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -50,60 +77,67 @@ export const LoginForm: FC = () => {
     })
   }
 
+
   // Function that handles when a user submits their login info to the server
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    // try {
+    // Set the user status to `loading`
+    dispatch(initiateLogin())
 
-    //   const response1: TokenSuccessResponse = await axiosInstance.post("accounts/token/", loginData)
-
-    //   console.log("Here is reponse1", response1)
-
-    //   if (response1.statusText !== "OK") {
-    //     throw new Error(`HTTP error with: ${response1.status} - ${response1.statusText}`)
-    //   }
-
-    //   console.log("Here is reponse1", response1)
-
-    //   const response2: any = await axiosInstance.get("accounts/users/")
-
-    //   console.log("Here is 2:", response2)
-
-    // }
-
-    // catch (error) {
-    //   console.error(`Could not login due to error: ${error}`);
-    // }
+    // Send the login information to the server to get a valid token
     axiosInstance
       .post("accounts/token/", loginData)
       .then((res: TokenSuccessResponse) => {
+
         // Set the various cookies to local storage values
         localStorage.setItem("access_token", res.data.access)
         localStorage.setItem("refresh_token", res.data.refresh)
 
         // IMPORTANT !!!
         // Update the `axios` instance with the user access token
-        axiosInstance.defaults.headers["Authorization"] = "JWT" + localStorage.getItem("access_token")
+        axiosInstance.defaults.headers["Authorization"] = "JWT " + res.data.access
+      })
 
-        console.log("Set tokens", axiosInstance.defaults.headers["Authorization"])
+      .then(() => {
+        // Check for a missing `access_token` in localStorage
+        if (!localStorage.getItem("access_token")) {
+          // Raise an error if the token was not set
+          return Promise.reject("No user token")
+        }
 
+        // Get the user based on their token
+        return axiosInstance.get("accounts/user/")
+      })
+
+      .then((res: UserObjectResponse) => {
+        // Update the REDUX state with the user object
+        dispatch(login(res.data))
+
+        // Once all login methods are complete, navigate to the home page
         navigate("/")
       })
-      // .then(axiosInstance.get("accounts/users/")
-      //   .then((res2: any) => {
-      //     console.log("This is res2", res2)
-      //   }))
-      .catch((err: any) => console.log(`Error in login with ${err}`))
+
+      // Catch any errors that occur in the login process
+      .catch((err: any) => {
+        console.log(`Error in login with ${err}`)
+
+        // If any error occurs, return all STATE slices back to their initial states
+        dispatch(logout())
+      })
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="login-form">
       <label htmlFor="email">Email</label>
       <input type="text" name="email" value={loginData.email} onChange={e => handleChange(e)} required />
+      <br />
       <label htmlFor="username">Password</label>
       <input type="password" name="password" value={loginData.password} onChange={e => handleChange(e)} required />
-      <button type="submit">Submit</button>
+      <br />
+      <div className="submit-button-container">
+        <button type="submit">Submit</button>
+      </div>
     </form>
   )
 }
