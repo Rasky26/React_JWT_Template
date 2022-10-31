@@ -1,38 +1,206 @@
-.App {
-  text-align: center;
+:root {
+  /* Set variables in CSS using `--` ahead of any term */
+  /* Global variables should be placed in `:root` */
+  /*  */
+  /* Set global color schemes */
+  --clr-gray: hsl(0, 0%, 49%);
+  --clr-purple: hsl(309, 71%, 42%);
+  --clr-light-purple: hsl(308, 49%, 82%);
+
+  /* Set other useful global variables, such as border radius */
+  --border-radius: 0.26em;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+header {
+  position: relative;
+  background-color: var(--clr-purple);
+  padding: 1em 0;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+header h1 {
+  text-align: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+header .login-logout-container {
+  position: absolute;
+  top: 28px;
+  right: 32px;
+}
+
+header .login-logout-container button {
+  display: inline-block;
+  background-color: var(--clr-purple);
+  border: none;
+  box-shadow: 0 0 0 1px var(--clr-light-purple);
+  padding: 4px 8px;
+  color: hsl(0, 0%, 100%);
+  text-decoration: none;
+  text-transform: none;
+  font-weight: bold;
+  transition: 0.26s;
+}
+
+header .login-logout-container button:focus,
+header .login-logout-container button:hover {
+  box-shadow: 0 0 0 3px var(--clr-light-purple);
+  outline: none;
+}
+
+header .login-logout-container span {
+  padding-right: 16px;
+}
+
+.example-home-page-banner {
+  text-align: center;
+  margin-bottom: 2.26em;
+  padding-top: 2em;
+}
+
+.example-section {
+  margin: 2.26em auto 0;
+  width: 50%;
+  /* Example of how and where you can use global variables  */
+  border: 2px solid var(--clr-purple);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 0 4px var(--clr-light-purple);
+  padding: 2rem;
+}
+
+.example-section h3 {
+  text-align: center;
+  padding-bottom: 2em;
+}
+
+.example-card .increment-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.example-card .increment-button-container button {
+  display: inline-block;
+  background-color: var(--clr-purple);
+  border: none;
+  height: 2.26em;
+  width: 2.26em;
+  box-shadow: 0 0 0 0px var(--clr-light-purple);
+  padding: 0;
+  color: hsl(0, 0%, 100%);
+  text-decoration: none;
+  text-transform: none;
+  font-weight: bold;
+  transition: 0.26s;
+}
+
+.example-card .increment-button-container button:hover,
+.example-card .increment-button-container button:focus {
+  box-shadow: 0 0 0 2px var(--clr-light-purple);
+  outline: none;
+}
+
+.example-card .increment-button-container span {
+  display: flex;
+  border-top: 1px solid var(--clr-light-purple);
+  border-bottom: 1px solid var(--clr-light-purple);
+  width: 4.52em;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.example-card .increment-by-value-container {
+  display: flex;
+  position: relative;
+  margin: 36px auto 0px;
+  justify-content: center;
+}
+
+.example-card .increment-by-value-container label {
+  position: absolute;
+  transform: translateY(-24px);
+  font-style: italic;
+  font-size: 80%;
+}
+
+.example-card .increment-by-value-container input {
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--clr-light-purple);
+  width: 4.52em;
+  margin-right: 0.86em;
+  text-align: center;
+  transition: 0.26s;
+}
+
+.example-card .increment-by-value-container input:focus,
+.example-card .increment-by-value-container input:active {
+  box-shadow: 0 0 0 2px var(--clr-purple);
+  outline: none;
+}
+
+.example-card .increment-by-value-container button {
+  background-color: var(--clr-purple);
+  border: none;
+  border-radius: 4px;
+  height: 2.26em;
+  width: 2.26em;
+  box-shadow: 0 0 0 0px var(--clr-light-purple);
+  padding: 0;
+  color: hsl(0, 0%, 100%);
+  text-decoration: none;
+  text-transform: none;
+  font-weight: bold;
+  transition: 0.26s;
+}
+
+.example-card .increment-by-value-container button:hover,
+.example-card .increment-by-value-container button:focus {
+  box-shadow: 0 0 0 2px var(--clr-light-purple);
+  outline: none;
+}
+
+.login-form {
+  position: relative;
+}
+
+.login-form input {
+  margin-top: 2em;
+  width: 100%;
+}
+
+.login-form label {
+  position: absolute;
+  font-style: italic;
+  transform: translateY(0.5em);
+}
+
+.login-form .submit-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2em;
+}
+
+.login-form button {
+  background-color: var(--clr-purple);
+  border: none;
+  box-shadow: 0 0 0 1px var(--clr-light-purple);
+  padding: 4px 8px;
+  color: hsl(0, 0%, 100%);
+  text-decoration: none;
+  text-transform: none;
+  font-weight: bold;
+  transition: 0.26s;
+}
+
+.login-form button:focus,
+.login-form button:hover {
+  box-shadow: 0 0 0 2px var(--clr-light-purple);
+  outline: none;
+}
+
+.login-redirect {
+  display: flex;
+  justify-content: center;
+  margin-top: 2em;
 }

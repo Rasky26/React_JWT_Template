@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// Import the core libraries and functions
+import { HashRouter as Router } from "react-router-dom"
+
+// Import universal components that will be shown on
+// ALL pages throughout the App
+import { Header } from "../content/header/Header"
+
+// Import the used components
+import { RouteProvider } from "./PageRoutes/RouteProvider"
+
+// Import the used stylesheet
+import "./App.css"
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    // Sets the `HashRouter` (renamed as `Router`)
+    <Router>
+
+      {/* Component that builds on ALL pages regardless of route */}
+      {/* EXAMPLE: Headers, Footers, NavBars, etc. */}
+      <Header />
+
+
+      {/* Component that contains ROUTE-SPECIFIC pages */}
+      {/* EXAMPLE: Home, About, Product-Details */}
+      <RouteProvider />
+
+    </Router>
+  )
 }
 
-export default App;
+export default App
